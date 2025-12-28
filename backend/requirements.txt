@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pandas
+numpy
+prophet
+openpyxl
+python-multipart
+scikit-learn
+plotly
+matplotlib
+google-generativeai
+python-dotenv

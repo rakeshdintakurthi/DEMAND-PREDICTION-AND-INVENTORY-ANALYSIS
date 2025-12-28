@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Node.js
+node_modules/
+dist/
+build/
+npm-debug.log
+
+# Environment Variables & Secrets
+.env
+.env.local
+
+# Local Data & Logs
+backend/sales_data.json
+backend/backend_errors.log
+debug_log.txt
+*.log
+
+# IDE
+.vscode/
+.idea/
