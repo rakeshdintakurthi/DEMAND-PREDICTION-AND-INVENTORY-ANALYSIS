@@ -1,5 +1,6 @@
-import { Bell, X } from 'lucide-react';
+import { Bell, X, Loader2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { api } from '../services/api';
 
 interface Notification {
     id: string;
@@ -12,67 +13,42 @@ interface Notification {
 
 export function NotificationsPopover({ onClose }: { onClose: () => void }) {
     const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Generate notifications from real data
-        const alerts: Notification[] = [];
-        const storedData = localStorage.getItem('salesData');
-
-        if (storedData) {
-            try {
-                const data = JSON.parse(storedData);
-                // Get latest inventory for each product
-                const latestInfo: Record<string, number> = {};
-                data.forEach((row: any) => {
-                    latestInfo[row.product] = row.inventory;
-                });
-
-                Object.entries(latestInfo).forEach(([product, inventory]) => {
-                    if (inventory < 50) {
-                        alerts.push({
-                            id: `stock-${product}`,
-                            title: 'Critical Stock Alert',
-                            message: `${product} inventory is critical (${inventory} units).`,
-                            type: 'warning',
-                            time: 'Just now',
-                            read: false
-                        });
-                    } else if (inventory < 150) {
-                        alerts.push({
-                            id: `stock-low-${product}`,
-                            title: 'Low Stock Warning',
-                            message: `${product} inventory is running low (${inventory} units).`,
-                            type: 'info',
-                            time: 'Recently',
-                            read: false
-                        });
-                    }
-                });
-            } catch (e) {
-                console.error("Error parsing data for notifications", e);
-            }
-        }
-
-        if (alerts.length === 0) {
-            alerts.push({
-                id: 'system-ready',
-                title: 'System Ready',
-                message: 'Dashboard is active and monitoring real-time data.',
-                type: 'success',
-                time: 'Now',
-                read: true
-            });
-        }
-
-        setNotifications(alerts);
+        loadNotifications();
+        // Optional: Poll every 10s
+        const interval = setInterval(loadNotifications, 10000);
+        return () => clearInterval(interval);
     }, []);
 
-    const markAllRead = () => {
-        setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    const loadNotifications = async () => {
+        try {
+            const data = await api.getNotifications();
+            setNotifications(data);
+        } catch (e) {
+            console.error("Failed to load notifications", e);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const clearAll = () => {
-        setNotifications([]);
+    const markAllRead = async () => {
+        try {
+            await api.markNotificationsRead();
+            setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const clearAll = async () => {
+        try {
+            await api.clearNotifications();
+            setNotifications([]);
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     return (
@@ -98,7 +74,7 @@ export function NotificationsPopover({ onClose }: { onClose: () => void }) {
                             <div key={n.id} className={`p-4 hover:bg-secondary/30 transition-colors ${n.read ? 'opacity-60' : 'bg-blue-50/30'}`}>
                                 <div className="flex gap-3">
                                     <div className={`mt-1 h-2 w-2 rounded-full shrink-0 ${n.type === 'warning' ? 'bg-orange-500' :
-                                            n.type === 'success' ? 'bg-green-500' : 'bg-blue-500'
+                                        n.type === 'success' ? 'bg-green-500' : 'bg-blue-500'
                                         }`} />
                                     <div>
                                         <h4 className="text-sm font-medium leading-none mb-1">{n.title}</h4>

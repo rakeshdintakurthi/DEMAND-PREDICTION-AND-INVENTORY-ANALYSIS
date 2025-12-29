@@ -52,5 +52,20 @@ export const api = {
     clearData: async () => {
         const response = await axios.post(`${API_URL}/clear-data`);
         return response.data;
+    },
+
+    getNotifications: async () => {
+        const response = await axios.get(`${API_URL}/notifications`);
+        return response.data;
+    },
+
+    markNotificationsRead: async () => {
+        const response = await axios.post(`${API_URL}/notifications/read`);
+        return response.data;
+    },
+
+    clearNotifications: async () => {
+        const response = await axios.post(`${API_URL}/notifications/clear`);
+        return response.data;
     }
 };

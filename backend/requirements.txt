@@ -10,3 +10,6 @@ plotly
 matplotlib
 google-generativeai
 python-dotenv
+Authlib
+httpx
+itsdangerous

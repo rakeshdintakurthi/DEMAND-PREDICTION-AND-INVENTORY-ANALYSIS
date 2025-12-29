@@ -11,20 +11,21 @@ from app.models.schemas import (
 from app.services.forecasting import generate_forecast
 from app.services.inventory import calculate_inventory_metrics
 
-from app.core.database import insert_sales_data, get_all_sales_data, clear_sales_data, get_recent_sales_data
+from app.core.database import (
+    insert_sales_data, get_all_sales_data, clear_sales_data, get_recent_sales_data,
+    add_notification, get_notifications, get_archived_history, mark_notifications_read, clear_notifications
+)
 
 router = APIRouter()
 
-@router.get("/history", response_model=List[SalesDataPoint])
+@router.get("/history")
 async def get_history_endpoint():
     try:
-        data_dicts = get_recent_sales_data(limit=500) # Fetch last 500 records
-        # Convert to Pydantic models
-        # Note: If DB has extra fields like 'id' or 'created_at', SalesDataPoint will ignore them 
-        # unless strict config is set. Pydantic V2 ignores extras by default. 
-        # But wait, SalesDataPoint definition in schemas.py doesn't have id/created_at.
-        # We should just map the fields we know.
-        return [SalesDataPoint(**record) for record in data_dicts]
+        # User requested to see saved history (archived batches), not just recent sales points.
+        history = get_archived_history()
+        return history
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -32,6 +33,14 @@ async def get_history_endpoint():
 async def clear_data_endpoint():
     try:
         result = clear_sales_data()
+        
+        # Add success notification
+        add_notification(
+            title="Data Cleared", 
+            message="All sales data has been cleared and archived to history.",
+            type="info"
+        )
+        
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -146,6 +155,29 @@ async def upload_file(file: UploadFile = File(...)):
 
         # Insert into Supabase
         insert_sales_data(records)
+        
+        # Add Notification
+        total_rev = sum(d['price'] * d['units_sold'] for d in records)
+        count = len(records)
+        add_notification(
+            title="Data Upload Success", 
+            message=f"Successfully uploaded {count} records. Total revenue processed: ₹{total_rev:,.0f}.",
+            type="success"
+        )
+
+        # Check for inventory alerts immediately
+        low_stock = [r['product'] for r in records if r['inventory'] < 50]
+        if low_stock:
+            limited_list = ", ".join(low_stock[:3])
+            more_count = len(low_stock) - 3
+            msg = f"Critical stock levels for: {limited_list}"
+            if more_count > 0:
+                msg += f" and {more_count} others."
+            add_notification(
+                title="Inventory Alert", 
+                message=msg,
+                type="warning"
+            )
             
         return {"message": "Data uploaded and saved to database successfully"}
         
@@ -157,6 +189,20 @@ async def upload_file(file: UploadFile = File(...)):
             f.write(error_msg + "\n----------------\n")
             
         raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
+
+@router.get("/notifications")
+async def get_notifications_endpoint():
+    return get_notifications()
+
+@router.post("/notifications/read")
+async def mark_read_endpoint():
+    mark_notifications_read()
+    return {"status": "success"}
+
+@router.post("/notifications/clear")
+async def clear_notifications_endpoint():
+    clear_notifications()
+    return {"status": "success"}
 
 @router.post("/forecast", response_model=ForecastResult)
 async def get_forecast(request: ForecastRequest):
