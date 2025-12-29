@@ -1,4 +1,4 @@
-import { Bell, X, Loader2 } from 'lucide-react';
+import { Bell, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 
@@ -13,7 +13,6 @@ interface Notification {
 
 export function NotificationsPopover({ onClose }: { onClose: () => void }) {
     const [notifications, setNotifications] = useState<Notification[]>([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         loadNotifications();
@@ -28,8 +27,6 @@ export function NotificationsPopover({ onClose }: { onClose: () => void }) {
             setNotifications(data);
         } catch (e) {
             console.error("Failed to load notifications", e);
-        } finally {
-            setLoading(false);
         }
     };
 

@@ -13,14 +13,11 @@ export function ProductAnalysis() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                // Fetch all data from history endpoint to extract products
-                const historyData = await api.getHistory();
-                if (historyData && historyData.length > 0) {
-                    const uniqueProducts = Array.from(new Set(historyData.map((d: any) => d.product))) as string[];
-                    setProducts(uniqueProducts);
-                    if (uniqueProducts.length > 0) {
-                        setSelectedProduct(uniqueProducts[0]);
-                    }
+                // Fetch active products from the current dataset
+                const productList = await api.getProducts();
+                setProducts(productList);
+                if (productList.length > 0) {
+                    setSelectedProduct(productList[0]);
                 }
             } catch (err) {
                 console.error("Failed to load products for analysis", err);

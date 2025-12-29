@@ -207,28 +207,33 @@ async def clear_notifications_endpoint():
 @router.post("/forecast", response_model=ForecastResult)
 async def get_forecast(request: ForecastRequest):
     try:
-        # Ignore request.data if it's empty, or fetch from DB
-        # Since I am changing the frontend to NOT send data, I should fetch key data from DB here.
-        # But wait, ForecastRequest model requires 'data'. I should check schemas.py.
-        # For now, let's fetch data from DB and inject it.
-        data_dicts = get_all_sales_data()
-        data = [SalesDataPoint(**record) for record in data_dicts]
-        
-        # Create a new request object with the DB data
-        # preserving context if passed (assuming request object still has context)
-        # Note: If frontend sends empty data list, we replace it.
-        request.data = data 
+        # Always prefer DB data for now as frontend might send empty list
+        if not request.data:
+            data_dicts = get_all_sales_data()
+            if not data_dicts:
+                # If no data, return empty result or specific error that frontend can handle
+                # Returning empty result prevents 500
+                return ForecastResult(ds=[], yhat=[], yhat_lower=[], yhat_upper=[], trend=[])
+            
+            # Convert to Pydantic models
+            request.data = [SalesDataPoint(**record) for record in data_dicts]
         
         return generate_forecast(request)
+    except ValueError as ve:
+        # Handle specific business logic errors (e.g. not enough data) as 400
+        raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/inventory", response_model=List[InventoryPlan])
 async def get_inventory_plan(request: InventoryRequest):
     try:
-        data_dicts = get_all_sales_data()
-        data = [SalesDataPoint(**record) for record in data_dicts]
-        request.data = data
+        if not request.data:
+            data_dicts = get_all_sales_data()
+            if not data_dicts:
+                return []
+            request.data = [SalesDataPoint(**record) for record in data_dicts]
+            
         return calculate_inventory_metrics(request)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -255,6 +260,17 @@ async def get_product_stats_endpoint(product_name: str):
         data_dicts = get_all_sales_data()
         data = [SalesDataPoint(**record) for record in data_dicts]
         return get_product_stats(data, product_name)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/products", response_model=List[str])
+async def get_products_endpoint():
+    try:
+        data_dicts = get_all_sales_data()
+        # Extract unique products using set
+        products = list({record.get('product') for record in data_dicts if record.get('product')})
+        products.sort()
+        return products
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

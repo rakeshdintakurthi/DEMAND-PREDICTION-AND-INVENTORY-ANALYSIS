@@ -1,0 +1,146 @@
+[
+  {
+    "id": 18,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 30 records. Total revenue processed: \u20b9312,542.",
+    "type": "success",
+    "time": "2025-12-29 12:13:11",
+    "read": false
+  },
+  {
+    "id": 17,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 12:12:53",
+    "read": false
+  },
+  {
+    "id": 16,
+    "title": "Inventory Alert",
+    "message": "Critical stock levels for: Samsung Galaxy M34, Samsung Galaxy M34, Sony Bravia TV and 2 others.",
+    "type": "warning",
+    "time": "2025-12-29 12:12:37",
+    "read": false
+  },
+  {
+    "id": 15,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 40 records. Total revenue processed: \u20b968,857,860.",
+    "type": "success",
+    "time": "2025-12-29 12:12:37",
+    "read": false
+  },
+  {
+    "id": 14,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 12:12:02",
+    "read": false
+  },
+  {
+    "id": 13,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 12:11:41",
+    "read": false
+  },
+  {
+    "id": 12,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 12:11:28",
+    "read": false
+  },
+  {
+    "id": 11,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 11:58:17",
+    "read": false
+  },
+  {
+    "id": 10,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 11:58:00",
+    "read": false
+  },
+  {
+    "id": 9,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 11:49:06",
+    "read": false
+  },
+  {
+    "id": 8,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 11:39:18",
+    "read": false
+  },
+  {
+    "id": 7,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 11:36:37",
+    "read": false
+  },
+  {
+    "id": 6,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 11:32:53",
+    "read": false
+  },
+  {
+    "id": 5,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 10:49:20",
+    "read": false
+  },
+  {
+    "id": 4,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 10:47:38",
+    "read": true
+  },
+  {
+    "id": 3,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 10:05:50",
+    "read": true
+  },
+  {
+    "id": 2,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 10:04:16",
+    "read": true
+  },
+  {
+    "id": 1,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 07:11:11",
+    "read": true
+  }
+]
