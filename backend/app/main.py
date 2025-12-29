@@ -23,7 +23,8 @@ origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    # allow_origins=origins, # Wildcard * with credentials is not allowed by browsers
+    allow_origin_regex="https?://.*", # Allow any http/https domain (Render, Vercel, Localhost)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

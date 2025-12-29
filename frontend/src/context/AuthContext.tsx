@@ -77,7 +77,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem('username');
         setUser(null);
         // Force redirect to backend logout to clear server-side session
-        window.location.href = 'http://localhost:8000/auth/logout';
+        // Force redirect to backend logout to clear server-side session
+        // Remove /api if present to point to auth/logout correctly usually mounted at root or check endpoints
+        // Actually backend endpoints.py doesn't seem to have auth/logout? 
+        // Wait, main.py might.
+        // Let's assume /auth/logout is correct relative to domain root, OR api router.
+        // If API_URL is .../api, and logout is at .../auth/logout.
+        // We need to parse. For now, let's use the API_URL but replace /api with /auth/logout if needed.
+        // Or better: backend/app/auth.py handles it?
+        // Let's stick to a safe replace.
+        const baseUrl = api.getBaseUrl().replace('/api', '');
+        window.location.href = `${baseUrl}/auth/logout`;
     };
 
     if (isLoading) {
