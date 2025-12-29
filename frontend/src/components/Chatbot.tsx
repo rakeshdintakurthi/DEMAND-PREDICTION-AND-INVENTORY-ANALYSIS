@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
 import { Button } from './ui/button';
 import { cn } from '../lib/utils';
-import axios from 'axios';
+import { api } from '../services/api';
 
 export function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,12 +32,8 @@ export function Chatbot() {
                 context = JSON.stringify(data);
             }
 
-            const response = await axios.post('http://localhost:8000/api/chat', {
-                message: userMsg,
-                context: context
-            });
-
-            setMessages(prev => [...prev, { role: 'bot', text: response.data.response }]);
+            const data = await api.chat(userMsg, context);
+            setMessages(prev => [...prev, { role: 'bot', text: data.response }]);
         } catch (error) {
             setMessages(prev => [...prev, { role: 'bot', text: 'Sorry, I encounted an error. Please try again.' }]);
             console.error(error);

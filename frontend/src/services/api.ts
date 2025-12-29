@@ -39,6 +39,11 @@ export const api = {
         return response.data;
     },
 
+    getProducts: async () => {
+        const response = await axios.get(`${API_URL}/products`);
+        return response.data;
+    },
+
     getCurrentUser: async () => {
         const response = await axios.get(`${API_URL.replace('/api', '')}/auth/me`, { withCredentials: true });
         return response.data;
@@ -66,6 +71,11 @@ export const api = {
 
     clearNotifications: async () => {
         const response = await axios.post(`${API_URL}/notifications/clear`);
+        return response.data;
+    },
+
+    chat: async (message: string, context: string) => {
+        const response = await axios.post(`${API_URL}/chat`, { message, context });
         return response.data;
     }
 };
