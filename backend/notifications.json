@@ -1,5 +1,141 @@
 [
   {
+    "id": 35,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 30 records. Total revenue processed: \u20b9312,542.",
+    "type": "success",
+    "time": "2026-01-02 18:51:42",
+    "read": false
+  },
+  {
+    "id": 34,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-31 08:19:06",
+    "read": false
+  },
+  {
+    "id": 33,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-31 07:59:50",
+    "read": false
+  },
+  {
+    "id": 32,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-31 07:58:05",
+    "read": false
+  },
+  {
+    "id": 31,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 16:18:45",
+    "read": false
+  },
+  {
+    "id": 30,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 16:14:20",
+    "read": false
+  },
+  {
+    "id": 29,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 16:14:07",
+    "read": false
+  },
+  {
+    "id": 28,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 15:58:54",
+    "read": false
+  },
+  {
+    "id": 27,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 15:58:36",
+    "read": false
+  },
+  {
+    "id": 26,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 15:47:21",
+    "read": false
+  },
+  {
+    "id": 25,
+    "title": "Inventory Alert",
+    "message": "Critical stock levels for: Unknown Product, Unknown Product, Unknown Product and 87 others.",
+    "type": "warning",
+    "time": "2025-12-29 15:46:49",
+    "read": false
+  },
+  {
+    "id": 24,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 90 records. Total revenue processed: \u20b90.",
+    "type": "success",
+    "time": "2025-12-29 15:46:49",
+    "read": false
+  },
+  {
+    "id": 23,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 15:45:49",
+    "read": false
+  },
+  {
+    "id": 22,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 15:39:20",
+    "read": false
+  },
+  {
+    "id": 21,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 15:21:21",
+    "read": false
+  },
+  {
+    "id": 20,
+    "title": "Data Upload Success",
+    "message": "Successfully uploaded 180 records. Total revenue processed: \u20b9167,376,610.",
+    "type": "success",
+    "time": "2025-12-29 14:56:29",
+    "read": false
+  },
+  {
+    "id": 19,
+    "title": "Data Cleared",
+    "message": "All sales data has been cleared and archived to history.",
+    "type": "info",
+    "time": "2025-12-29 14:56:13",
+    "read": false
+  },
+  {
     "id": 18,
     "title": "Data Upload Success",
     "message": "Successfully uploaded 30 records. Total revenue processed: \u20b9312,542.",
