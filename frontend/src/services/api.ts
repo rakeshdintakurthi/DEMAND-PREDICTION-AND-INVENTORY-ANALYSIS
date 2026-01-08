@@ -2,83 +2,75 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
+const axiosInstance = axios.create({
+    baseURL: API_URL,
+    withCredentials: true,
+});
+
 export const api = {
-    getBaseUrl: () => {
-        return API_URL;
-    },
+    getBaseUrl: () => API_URL,
+
     uploadData: async (file: File) => {
         const formData = new FormData();
         formData.append('file', file);
-        const response = await axios.post(`${API_URL}/upload`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
+        const res = await axiosInstance.post('/upload', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
         });
-        return response.data;
+        return res.data;
     },
 
     getForecast: async () => {
-        const response = await axios.post(`${API_URL}/forecast`, { data: [] });
-        return response.data;
+        return (await axiosInstance.post('/forecast', { data: [] })).data;
     },
 
     getInventoryPlan: async () => {
-        const response = await axios.post(`${API_URL}/inventory`, { data: [] });
-        return response.data;
+        return (await axiosInstance.post('/inventory', { data: [] })).data;
     },
 
     getDashboardStats: async () => {
-        const response = await axios.get(`${API_URL}/dashboard`);
-        return response.data;
+        return (await axiosInstance.get('/dashboard')).data;
     },
 
     login: async (username: string, password: string) => {
-        const response = await axios.post(`${API_URL}/login`, { username, password });
-        return response.data;
+        return (await axiosInstance.post('/login', { username, password })).data;
     },
 
     getProductStats: async (product_name: string) => {
-        const response = await axios.get(`${API_URL}/product-stats`, { params: { product_name } });
-        return response.data;
+        return (await axiosInstance.get('/product-stats', { params: { product_name } })).data;
     },
 
     getProducts: async () => {
-        const response = await axios.get(`${API_URL}/products`);
-        return response.data;
+        return (await axiosInstance.get('/products')).data;
     },
 
     getCurrentUser: async () => {
-        const response = await axios.get(`${API_URL.replace('/api', '')}/auth/me`, { withCredentials: true });
-        return response.data;
+        return (await axios.get(
+            API_URL.replace('/api', '') + '/auth/me',
+            { withCredentials: true }
+        )).data;
     },
 
     getHistory: async () => {
-        const response = await axios.get(`${API_URL}/history`);
-        return response.data;
+        return (await axiosInstance.get('/history')).data;
     },
 
     clearData: async () => {
-        const response = await axios.post(`${API_URL}/clear-data`);
-        return response.data;
+        return (await axiosInstance.post('/clear-data')).data;
     },
 
     getNotifications: async () => {
-        const response = await axios.get(`${API_URL}/notifications`);
-        return response.data;
+        return (await axiosInstance.get('/notifications')).data;
     },
 
     markNotificationsRead: async () => {
-        const response = await axios.post(`${API_URL}/notifications/read`);
-        return response.data;
+        return (await axiosInstance.post('/notifications/read')).data;
     },
 
     clearNotifications: async () => {
-        const response = await axios.post(`${API_URL}/notifications/clear`);
-        return response.data;
+        return (await axiosInstance.post('/notifications/clear')).data;
     },
 
     chat: async (message: string, context: string) => {
-        const response = await axios.post(`${API_URL}/chat`, { message, context });
-        return response.data;
-    }
+        return (await axiosInstance.post('/chat', { message, context })).data;
+    },
 };
