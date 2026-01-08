@@ -289,32 +289,21 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Configure Gemini
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-model = None
-
-try:
-    import google.generativeai as genai
-    if GOOGLE_API_KEY:
-        genai.configure(api_key=GOOGLE_API_KEY)
-        model = genai.GenerativeModel('gemini-flash-latest')
-    else:
-        print("WARNING: GOOGLE_API_KEY not found in .env. Chatbot will not work.")
-except ImportError as e:
-    print(f"WARNING: Could not import google.generativeai. Chatbot disabled. Error: {e}")
-except Exception as e:
-    print(f"WARNING: Error initializing Gemini: {e}")
+import httpx
+import json
 
 @router.post("/chat")
 async def chat_endpoint(request: ChatRequest):
-    print("DEBUG: Chat endpoint called")
-    if not model:
-        print("DEBUG: Model is None")
-        raise HTTPException(status_code=503, detail="Chatbot service is unavailable. Check server logs for API Key or Dependency issues.")
+    print("DEBUG: Chat endpoint called (REST)")
     
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=503, detail="Chatbot service unavailable. Missing GOOGLE_API_KEY.")
+
     try:
         print(f"DEBUG: Processing message: {request.message}")
-        # Construct prompt with context
+        
+        # System Prompt
         system_prompt = (
             "You are an expert Supply Chain Analyst for the 'DemandAI' dashboard. "
             "Your behavior should be conversational and helpful.\n"
@@ -324,11 +313,35 @@ async def chat_endpoint(request: ChatRequest):
             "3. If the user asks a general question, provide professional supply chain advice.\n"
             "Keep answers concise."
         )
+        
         full_prompt = f"{system_prompt}\n\n[SALES DATA CONTEXT]:\n{request.context}\n\n[USER QUESTION]:\n{request.message}"
         
-        response = model.generate_content(full_prompt)
-        print("DEBUG: Response generated successfully")
-        return {"response": response.text}
+        # Gemini REST API URL (v1beta) - Using gemini-2.0-flash as identified in available models
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
+        
+        payload = {
+            "contents": [{
+                "parts": [{"text": full_prompt}]
+            }]
+        }
+        
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, json=payload, timeout=30.0)
+            
+            if response.status_code != 200:
+                print(f"DEBUG: API Error {response.status_code}: {response.text}")
+                raise HTTPException(status_code=500, detail=f"Gemini API Error: {response.text}")
+                
+            data = response.json()
+            # Extract text
+            try:
+                bot_text = data['candidates'][0]['content']['parts'][0]['text']
+                print("DEBUG: Response generated successfully")
+                return {"response": bot_text}
+            except (KeyError, IndexError) as e:
+                print(f"DEBUG: Parsing Error: {data}")
+                raise HTTPException(status_code=500, detail="Failed to parse AI response.")
+
     except Exception as e:
         print(f"DEBUG: Error generating content: {e}")
         raise HTTPException(status_code=500, detail=str(e))
