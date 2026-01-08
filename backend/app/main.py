@@ -15,7 +15,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY", "verify_random_secret_string")
-app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=SECRET_KEY,
+    same_site="none",   # REQUIRED for cross-site cookies
+    https_only=True     # REQUIRED for HTTPS (Render/Vercel)
+)
+
 
 # CORS Middleware (Outer Middleware - Must be added LAST to wrap everything)
 # Allow all origins for demo deployment ease
